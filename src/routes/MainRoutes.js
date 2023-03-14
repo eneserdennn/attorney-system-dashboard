@@ -3,11 +3,14 @@ import { lazy } from "react";
 // project import
 import Loadable from "components/Loadable";
 import MainLayout from "layout/MainLayout";
-import OrderTable from "pages/dashboard/OrdersTable";
 import Organization from "pages/organization/Organization";
 import Calendar from "pages/calendar/Calendar";
 import Mail from "pages/mails/Mail";
 import Task from "pages/task/Task";
+import Folders from "pages/folders/Folders";
+import AddClient from "pages/client/AddClient";
+import AddFolder from "pages/folders/AddFolder";
+import AddOrganization from "pages/organization/AddOrganization";
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import("pages/dashboard")));
@@ -64,8 +67,24 @@ const MainRoutes = {
       element: <Clients />,
     },
     {
+      path: "/add/clients",
+      element: <AddClient />,
+    },
+    {
+      path: "/add/folders",
+      element: <AddFolder />,
+    },
+    {
+      path: "/add/organization",
+      element: <AddOrganization />,
+    },
+    {
       path: "organization",
       element: <Organization />,
+    },
+    {
+      path: "folders",
+      element: <Folders />,
     },
     {
       path: "task",

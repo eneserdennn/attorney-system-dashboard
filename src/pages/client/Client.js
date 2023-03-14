@@ -9,16 +9,11 @@ import { dispatch } from "redux/store/index";
 import { fetchClients } from "redux/store/reducers/fetchClients";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
+import { useGetAllClients } from "hooks/useGetAllClients";
+import DataGridCreater from "components/DgCreater/DataGridCreater";
 const Client = () => {
   const status = useSelector(selectStatus);
-  const clients = useSelector(selectAllClients);
-  console.log(clients);
-  useEffect(() => {
-    if (status == "idle") {
-      dispatch(fetchClients());
-    }
-  }, [status]);
-
+  const { clients } = useGetAllClients(status);
   const columns = [
     { field: "_id", headerName: "ID" },
     { field: "name", headerName: "Name", flex: 1 },
@@ -47,7 +42,7 @@ const Client = () => {
   ];
   return (
     <Box height="75vh">
-      <DataGrid getRowId={(row) => row._id} columns={columns} rows={clients} />
+      <DataGridCreater columns={columns} clients={clients} />
     </Box>
   );
 };

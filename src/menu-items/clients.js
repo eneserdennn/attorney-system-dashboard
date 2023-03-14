@@ -8,6 +8,7 @@ import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import FolderIcon from "@mui/icons-material/Folder";
 // icons
 const icons = {
   ChromeOutlined,
@@ -17,9 +18,9 @@ const icons = {
 
 // ==============================|| MENU ITEMS - SAMPLE PAGE & DOCUMENTATION ||============================== //
 
-const support = {
-  id: "support",
-  title: "Support",
+const clients = {
+  id: "clients",
+  title: "Clients",
   type: "group",
   children: [
     {
@@ -35,6 +36,13 @@ const support = {
       type: "item",
       url: "/clients",
       icon: icons.UserOutlined,
+    },
+    {
+      id: "folder",
+      title: "Folders",
+      type: "item",
+      url: "/folders",
+      icon: FolderIcon,
     },
     {
       id: "Calendar",
@@ -60,4 +68,4 @@ const support = {
   ],
 };
 
-export default support;
+export default clients;
