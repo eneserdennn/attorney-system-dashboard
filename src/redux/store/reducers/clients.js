@@ -9,7 +9,6 @@ const initialState = {
 };
 const fetchClients = createAsyncThunk("clients/fetchClients", async () => {
   const response = await axios.get("http://localhost:8000/api/clients/");
-  console.log(response.data);
   return response.data;
 });
 const clientsSlice = createSlice({
@@ -23,7 +22,9 @@ const clientsSlice = createSlice({
       })
       .addCase(fetchClients.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.clients = action.payload;
+        state.clients = action.payload.filter(
+          (user) => user.isOrganization === false && user.deleted === false
+        );
       })
       .addCase(fetchClients.rejected, (state, action) => {
         state.status = "failed";
@@ -32,10 +33,10 @@ const clientsSlice = createSlice({
   },
 });
 
-export default clientsSlice.reducer;
-
 export const selectAllClients = (state) => state.clients.clients;
 
 export const selectStatus = (state) => state.clients.status;
 
 export const selectError = (state) => state.clients.error;
+
+export default clientsSlice.reducer;
