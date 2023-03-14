@@ -9,7 +9,7 @@ import { dispatch } from "redux/store/index";
 import { fetchClients } from "redux/store/reducers/fetchClients";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
-const Client = () => {
+const Organization = () => {
   const status = useSelector(selectStatus);
   const clients = useSelector(selectAllClients);
   console.log(clients);
@@ -53,4 +53,4 @@ const Client = () => {
   );
 };
 
-export default Client;
+export default Organization;
