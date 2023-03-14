@@ -6,6 +6,8 @@ import {
 } from "@ant-design/icons";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 // icons
 const icons = {
   ChromeOutlined,
@@ -21,11 +23,11 @@ const support = {
   type: "group",
   children: [
     {
-      id: "sample-page",
-      title: "Sample Page",
+      id: "mail",
+      title: "Mails",
       type: "item",
-      url: "/sample-page",
-      icon: icons.ChromeOutlined,
+      url: "/mail",
+      icon: AlternateEmailIcon,
     },
     {
       id: "client",
@@ -47,6 +49,13 @@ const support = {
       type: "item",
       url: "/organization",
       icon: CorporateFareIcon,
+    },
+    {
+      id: "task",
+      title: "Tasks",
+      type: "item",
+      url: "/task",
+      icon: AssignmentIcon,
     },
   ],
 };

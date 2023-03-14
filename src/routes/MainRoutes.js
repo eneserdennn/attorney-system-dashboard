@@ -6,6 +6,8 @@ import MainLayout from "layout/MainLayout";
 import OrderTable from "pages/dashboard/OrdersTable";
 import Organization from "pages/organization/Organization";
 import Calendar from "pages/calendar/Calendar";
+import Mail from "pages/mails/Mail";
+import Task from "pages/task/Task";
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import("pages/dashboard")));
@@ -64,6 +66,14 @@ const MainRoutes = {
     {
       path: "organization",
       element: <Organization />,
+    },
+    {
+      path: "task",
+      element: <Task />,
+    },
+    {
+      path: "mail",
+      element: <Mail />,
     },
     {
       path: "shadow",

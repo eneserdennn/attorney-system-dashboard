@@ -26,7 +26,6 @@ const Client = () => {
     { field: "email", headerName: "E Mail", flex: 1 },
     { field: "phone", headerName: "Phone", flex: 1 },
     { field: "city", headerName: "City", flex: 1 },
-    { field: "username", headerName: "User Name", flex: 1 },
     {
       field: "actions",
       headerName: "Edit/Delete",
@@ -47,7 +46,7 @@ const Client = () => {
     },
   ];
   return (
-    <Box height="75vh" maxWidth="1800px">
+    <Box height="75vh">
       <DataGrid getRowId={(row) => row._id} columns={columns} rows={clients} />
     </Box>
   );
