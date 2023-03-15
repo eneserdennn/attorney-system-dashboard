@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import fetchClients from "./fetchClients";
 
 const api = "http://localhost:8000";
 
@@ -10,13 +9,11 @@ const initialState = {
   error: null,
 };
 
-export const login = createAsyncThunk(
-  "auth/login",
-  async ({ email, password }) => {
-    const response = await api.post("/users/login", { email, password });
-    return response.data;
-  }
-);
+export const login = createAsyncThunk("auth/login", async (email, password) => {
+  const response = await api.post("/api/users/login", email, password);
+  console.log(response.data);
+  return response.data;
+});
 
 const authSlice = createSlice({
   name: "auth",

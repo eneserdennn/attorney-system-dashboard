@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { login, ProfileInfo } from "../../../redux/store/reducers/auth";
+import { ProfileInfo } from "../../../redux/store/reducers/auth";
 
 // material-ui
 import {
@@ -39,8 +39,7 @@ const AuthLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  // const isLoading = useSelector((state) => state.auth.isLoading);
-  // const error = useSelector((state) => state.auth.error);
+
   const [checked, setChecked] = useState(true);
   const token = useSelector(ProfileInfo);
   console.log(token);
@@ -64,17 +63,15 @@ const AuthLogin = () => {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    dispatch(login({ email, password }));
+    console.log(event);
   };
 
   return (
     <>
       <Formik
         initialValues={{
-          email: "info@codedthemes.com",
-          password: "123456",
-          submit: null,
+          email: "",
+          password: "",
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string()
@@ -83,9 +80,7 @@ const AuthLogin = () => {
             .required("Email is required"),
           password: Yup.string().max(255).required("Password is required"),
         })}
-        onSubmit={() => {
-          dispatch(login({ email, password }));
-        }}
+        onSubmit={handleSubmit}
       >
         {({
           errors,
