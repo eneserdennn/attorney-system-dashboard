@@ -1,40 +1,51 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const api = "http://localhost:8000";
+export const login = createAsyncThunk("auth/login", async (credentials) => {
+  const response = await fetch("http://localhost:8000/api/users/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message);
+  }
+  const data = await response.json();
 
-const initialState = {
-  profileInfo: {},
-  token: null,
-  status: "idle",
-  error: null,
-};
+  // Token localStorage'a kaydediliyor
+  localStorage.setItem("token", data.token);
 
-export const login = createAsyncThunk("auth/login", async (email, password) => {
-  const response = await api.post("/api/users/login", email, password);
-  console.log(response.data);
-  return response.data;
+  return data;
 });
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(login.pending, (state) => {
-      state.status = true;
-    });
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.status = "loggedin";
-      state.profileInfo = action.payload;
+  initialState: { user: null, token: null, status: "idle", error: null },
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+
+      // Token localStorage'dan siliniyor
+      localStorage.removeItem("token");
+    },
+  },
+  extraReducers: {
+    [login.pending]: (state) => {
+      state.status = "loading";
+    },
+    [login.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.user = action.payload;
       state.token = action.payload.token;
-    });
-    builder.addCase(login.rejected, (state, action) => {
-      state.status = "loggedout";
+      state.error = null;
+    },
+    [login.rejected]: (state, action) => {
+      state.status = "failed";
       state.error = action.error.message;
-    });
+    },
   },
 });
 
-export const ProfileInfo = (state) => state.auth.profileInfo;
-export const UserToken = (state) => state.auth.token;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

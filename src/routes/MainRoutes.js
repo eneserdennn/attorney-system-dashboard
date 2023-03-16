@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { Navigate } from "react-router-dom";
 
 // project import
 import Loadable from "components/Loadable";
@@ -23,13 +24,22 @@ const Clients = Loadable(lazy(() => import("pages/client/Client")));
 
 // render - utilities
 const Typography = Loadable(
-  lazy(() => import("pages/components-overview/Typography"))
+    lazy(() => import("pages/components-overview/Typography"))
 );
 const Color = Loadable(lazy(() => import("pages/components-overview/Color")));
 const Shadow = Loadable(lazy(() => import("pages/components-overview/Shadow")));
 const AntIcons = Loadable(
-  lazy(() => import("pages/components-overview/AntIcons"))
+    lazy(() => import("pages/components-overview/AntIcons"))
 );
+
+// check if user has token, otherwise redirect to login
+const protectedRoutes = (element) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
+    return element;
+}
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -39,72 +49,72 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <DashboardDefault />,
+      element: protectedRoutes(<Navigate to="/dashboard/default" />),
     },
     {
       path: "color",
-      element: <Color />,
+      element: protectedRoutes(<Color />),
     },
     {
       path: "dashboard",
       children: [
         {
           path: "default",
-          element: <DashboardDefault />,
+          element: protectedRoutes(<DashboardDefault />),
         },
       ],
     },
     {
       path: "sample-page",
-      element: <SamplePage />,
+      element: protectedRoutes(<SamplePage />),
     },
     {
       path: "calendar",
-      element: <Calendar />,
+      element: protectedRoutes(<Calendar />),
     },
     {
       path: "clients",
-      element: <Clients />,
+      element: protectedRoutes(<Clients />),
     },
     {
       path: "/add/clients",
-      element: <AddClient />,
+      element: protectedRoutes(<AddClient />),
     },
     {
       path: "/add/folders",
-      element: <AddFolder />,
+      element: protectedRoutes(<AddFolder />),
     },
     {
       path: "/add/organization",
-      element: <AddOrganization />,
+      element: protectedRoutes(<AddOrganization />),
     },
     {
       path: "organization",
-      element: <Organization />,
+      element: protectedRoutes(<Organization />),
     },
     {
       path: "folders",
-      element: <Folders />,
+      element: protectedRoutes(<Folders />),
     },
     {
       path: "task",
-      element: <Task />,
+      element: protectedRoutes(<Task />),
     },
     {
       path: "mail",
-      element: <Mail />,
+      element: protectedRoutes(<Mail />),
     },
     {
       path: "shadow",
-      element: <Shadow />,
+      element: protectedRoutes(<Shadow />),
     },
     {
       path: "typography",
-      element: <Typography />,
+      element: protectedRoutes(<Typography />),
     },
     {
       path: "icons/ant",
-      element: <AntIcons />,
+      element: protectedRoutes(<AntIcons />),
     },
   ],
 };
