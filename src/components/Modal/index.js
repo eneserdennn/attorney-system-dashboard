@@ -1,42 +1,39 @@
-import React, { useState } from "react";
-import { Button, Modal } from "antd";
+import React, { useContext, useState } from "react";
+import { Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal, modalState, openModal } from "redux/store/reducers/modal";
+import { closeModal, modalState } from "redux/store/reducers/modal";
 import ModalStep from "components/Steps/index";
+import EditFormContext from "context/EditFormContext";
+import axios from "../../../node_modules/axios/index";
 
 const ModalPage = () => {
   const dispatch = useDispatch();
   const modal = useSelector(modalState);
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
-  const showModal = () => {
-    dispatch(openModal());
-  };
+
+  const [confirmLoading] = useState(false);
+  const { clientForm } = useContext(EditFormContext);
 
   const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      dispatch(closeModal());
-      setConfirmLoading(false);
-    }, 2000);
+    console.log(clientForm);
+    dnm(clientForm);
   };
   const handleCancel = () => {
     dispatch(closeModal());
   };
-  console.log(modal);
+  const dnm = async (clientForm) =>
+    await axios
+      .put(`http://localhost:8000/api/clients/${clientForm._id}`, clientForm)
+      .then((res) => console.log(res.data));
   return (
     <>
       <Modal
-        title="Title"
+        title="Edit a Client"
         open={modal}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
         <ModalStep />
-        <p>{modalText}</p>
       </Modal>
     </>
   );

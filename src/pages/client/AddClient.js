@@ -1,127 +1,55 @@
-import { PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Cascader,
-  Checkbox,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
-import { useState } from "react";
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
+import { Form, Input } from "antd";
+import MainCard from "components/MainCard";
 const AddClient = () => {
-  const [componentDisabled, setComponentDisabled] = useState(true);
   return (
-    <>
-      <Checkbox
-        checked={componentDisabled}
-        onChange={(e) => setComponentDisabled(e.target.checked)}
-      >
-        Form disabled
-      </Checkbox>
+    <MainCard title="Add New Client" sx={{ textAlign: "center" }}>
       <Form
         labelCol={{
-          span: 4,
+          span: 6,
         }}
         wrapperCol={{
           span: 14,
         }}
         layout="horizontal"
-        disabled={componentDisabled}
+        //   disabled={componentDisabled}
         style={{
-          maxWidth: 600,
+          maxWidth: 800,
+          margin: 20,
         }}
       >
-        <Form.Item label="Checkbox" name="disabled" valuePropName="checked">
-          <Checkbox>Checkbox</Checkbox>
-        </Form.Item>
-        <Form.Item label="Radio">
-          <Radio.Group>
-            <Radio value="apple"> Apple </Radio>
-            <Radio value="pear"> Pear </Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="Input">
+        <Form.Item label="name">
           <Input />
         </Form.Item>
-        <Form.Item label="Select">
-          <Select>
-            <Select.Option value="demo">Demo</Select.Option>
-          </Select>
+        <Form.Item label="surname">
+          <Input />
         </Form.Item>
-        <Form.Item label="TreeSelect">
-          <TreeSelect
-            treeData={[
-              {
-                title: "Light",
-                value: "light",
-                children: [
-                  {
-                    title: "Bamboo",
-                    value: "bamboo",
-                  },
-                ],
-              },
-            ]}
-          />
+        <Form.Item label="phone">
+          <Input />
         </Form.Item>
-        <Form.Item label="Cascader">
-          <Cascader
-            options={[
-              {
-                value: "zhejiang",
-                label: "Zhejiang",
-                children: [
-                  {
-                    value: "hangzhou",
-                    label: "Hangzhou",
-                  },
-                ],
-              },
-            ]}
-          />
+
+        <Form.Item label="address">
+          <Input />
         </Form.Item>
-        <Form.Item label="DatePicker">
-          <DatePicker />
+        <Form.Item label="city">
+          <Input />
         </Form.Item>
-        <Form.Item label="RangePicker">
-          <RangePicker />
+        <Form.Item label="is Organization">
+          <Input />
         </Form.Item>
-        <Form.Item label="InputNumber">
-          <InputNumber />
+
+        <Form.Item label="Quality">
+          <Input />
         </Form.Item>
-        <Form.Item label="TextArea">
-          <TextArea rows={4} />
+
+        <Form.Item label="Currency">
+          <Input />
         </Form.Item>
-        <Form.Item label="Switch" valuePropName="checked">
-          <Switch />
-        </Form.Item>
-        <Form.Item label="Upload" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
-            <div>
-              <PlusOutlined />
-              <div
-                style={{
-                  marginTop: 8,
-                }}
-              >
-                Upload
-              </div>
-            </div>
-          </Upload>
-        </Form.Item>
-        <Form.Item label="Button">
-          <Button>Button</Button>
+
+        <Form.Item label="Organization">
+          <Input />
         </Form.Item>
       </Form>
-    </>
+    </MainCard>
   );
 };
 
