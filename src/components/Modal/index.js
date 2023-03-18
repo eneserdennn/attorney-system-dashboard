@@ -15,12 +15,12 @@ const ModalPage = () => {
 
   const handleOk = () => {
     console.log(clientForm);
-    dnm(clientForm);
+    postClient(clientForm);
   };
   const handleCancel = () => {
     dispatch(closeModal());
   };
-  const dnm = async (clientForm) =>
+  const postClient = async (clientForm) =>
     await axios
       .put(`http://localhost:8000/api/clients/${clientForm._id}`, clientForm)
       .then((res) => console.log(res.data));

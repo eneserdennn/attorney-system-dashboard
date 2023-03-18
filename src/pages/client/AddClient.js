@@ -1,6 +1,18 @@
 import { Form, Input } from "antd";
 import MainCard from "components/MainCard";
+import { useState } from "react";
 const AddClient = () => {
+  const [userForm, setUserForm] = useState({
+    name: "",
+    surname: "",
+    phone: "",
+    address: "",
+    city: "",
+    isOrganization: "",
+    Quality: "",
+    currency: "",
+    organization: "",
+  });
   return (
     <MainCard title="Add New Client" sx={{ textAlign: "center" }}>
       <Form
