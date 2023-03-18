@@ -4,6 +4,7 @@ import axios from "../../../../node_modules/axios/index";
 
 const initialState = {
   clients: [],
+  client: {},
   status: "idle",
   error: null,
   updateStatus: "idle",
@@ -15,6 +16,14 @@ const fetchClients = createAsyncThunk("clients/fetchClients", async () => {
   const response = await axios.get(`${BASE_URL}/api/clients/`);
   return response.data;
 });
+
+export const fetchClient = createAsyncThunk(
+  "client/fetchClient",
+  async (id) => {
+    const response = await axios.get(`${BASE_URL}/api/clients/${id}`);
+    return response.data;
+  }
+);
 // export const postClient = createAsyncThunk(
 //   "clients/postClient",
 //   async (clientInfo) => {
@@ -43,6 +52,17 @@ const clientsSlice = createSlice({
       .addCase(fetchClients.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchClient.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchClient.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fetchClient.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.client = action.payload;
       });
   },
 });
@@ -52,5 +72,7 @@ export const selectAllClients = (state) => state.clients.clients;
 export const selectStatus = (state) => state.clients.status;
 
 export const selectError = (state) => state.clients.error;
+
+export const selectClient = (state) => state.clients.client;
 
 export default clientsSlice.reducer;

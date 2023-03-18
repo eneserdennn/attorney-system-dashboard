@@ -22,7 +22,14 @@ const Client = () => {
   const dispatch = useDispatch();
   const columns = [
     { field: "_id", headerName: "ID" },
-    { field: "name", headerName: "Name", flex: 1 },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      renderCell: (params) => (
+        <Link to={`/clients/${params.row._id}`}>{params.row.name}</Link>
+      ),
+    },
     { field: "surname", headerName: "Surname" },
     { field: "email", headerName: "E Mail", flex: 1 },
     { field: "phone", headerName: "Phone", flex: 1 },

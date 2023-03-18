@@ -12,6 +12,7 @@ import Folders from "pages/folders/Folders";
 import AddClient from "pages/client/AddClient";
 import AddFolder from "pages/folders/AddFolder";
 import AddOrganization from "pages/organization/AddOrganization";
+import SingleClient from "pages/client/SingleClient";
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import("pages/dashboard")));
@@ -24,22 +25,22 @@ const Clients = Loadable(lazy(() => import("pages/client/Client")));
 
 // render - utilities
 const Typography = Loadable(
-    lazy(() => import("pages/components-overview/Typography"))
+  lazy(() => import("pages/components-overview/Typography"))
 );
 const Color = Loadable(lazy(() => import("pages/components-overview/Color")));
 const Shadow = Loadable(lazy(() => import("pages/components-overview/Shadow")));
 const AntIcons = Loadable(
-    lazy(() => import("pages/components-overview/AntIcons"))
+  lazy(() => import("pages/components-overview/AntIcons"))
 );
 
 // check if user has token, otherwise redirect to login
 const protectedRoutes = (element) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        return <Navigate to="/login" />;
-    }
-    return element;
-}
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+  return element;
+};
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -76,6 +77,7 @@ const MainRoutes = {
       path: "clients",
       element: protectedRoutes(<Clients />),
     },
+    { path: "clients/:id", element: protectedRoutes(<SingleClient />) },
     {
       path: "/add/clients",
       element: protectedRoutes(<AddClient />),

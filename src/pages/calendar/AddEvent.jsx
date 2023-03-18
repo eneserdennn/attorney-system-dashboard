@@ -1,47 +1,39 @@
-import React from "react";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  TimePicker,
-  DatePicker,
-  Space,
-  Select,
-} from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, TimePicker, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
-const format = "HH:mm";
-const { TextArea } = Input;
-const options = [
-  {
-    value: "jack",
-    label: "Jack",
-  },
-  {
-    value: "lucy",
-    label: "Lucy",
-  },
-  {
-    value: "Yiminghe",
-    label: "yiminghe",
-  },
-  {
-    value: "disabled",
-    label: "Disabled",
-    disabled: true,
-  },
-];
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
 
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
-const onChange = (date, dateString) => {
-  console.log(date, dateString);
-};
 const AddEvent = () => {
+  const [form, setForm] = useState({});
+  const format = "HH:mm";
+  const { TextArea } = Input;
+  const options = [
+    {
+      value: "jack",
+      label: "Jack",
+    },
+    {
+      value: "lucy",
+      label: "Lucy",
+    },
+    {
+      value: "Yiminghe",
+      label: "yiminghe",
+    },
+    {
+      value: "disabled",
+      label: "Disabled",
+      disabled: true,
+    },
+  ];
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    console.log(values.enddate.$d);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
     <Form
       name="basic"
@@ -52,6 +44,7 @@ const AddEvent = () => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
+      onValuesChange={(allValues) => console.log(allValues)}
     >
       <Form.Item
         label="Name"
@@ -63,24 +56,34 @@ const AddEvent = () => {
 
       <Form.Item
         label="Start Date"
-        name="start-date"
-        rules={[{ required: true, message: "Please input your password!" }]}
+        name="startdate"
+        rules={[{ required: true, message: "Please select a date & time !" }]}
       >
-        <Space direction="horizontal">
-          <DatePicker onChange={onChange} />
-          <TimePicker defaultValue={dayjs("12:08", format)} format={format} />
-        </Space>
+        <DatePicker />
+      </Form.Item>
+
+      <Form.Item
+        label="Start Time"
+        name="starttime"
+        rules={[{ required: true, message: "Please select a date & time !" }]}
+      >
+        <TimePicker />
       </Form.Item>
 
       <Form.Item
         label="End Date"
-        name="end-date"
-        rules={[{ required: true, message: "Please input your password!" }]}
+        name="enddate"
+        rules={[{ required: true, message: "Please select a date & time !" }]}
       >
-        <Space direction="horizontal">
-          <DatePicker onChange={onChange} />
-          <TimePicker defaultValue={dayjs("12:08", format)} format={format} />
-        </Space>
+        <DatePicker />
+      </Form.Item>
+
+      <Form.Item
+        label="End Time"
+        name="endtime"
+        rules={[{ required: true, message: "Please select a date & time !" }]}
+      >
+        <TimePicker defaultValue={dayjs("12:08", format)} format={format} />
       </Form.Item>
       <Form.Item
         label="Place"
@@ -107,7 +110,6 @@ const AddEvent = () => {
             width: 120,
           }}
           options={options}
-          onChange={(e) => console.log(e)}
         />
       </Form.Item>
       <Form.Item

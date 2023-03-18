@@ -60,10 +60,14 @@ const Calendar = () => {
                   id: "1",
                   title: "Örnek etkinlik 1",
                   start: "2023-03-17T10:00:00",
+                  display: false,
                   end: "2023-03-17T12:00:00",
                   backgroundColor: "#0277bd",
                   borderColor: "#01579b",
                   textColor: "#fff",
+                  extendedProps: {
+                    ananin: "ami",
+                  },
                 },
                 {
                   id: "2",
@@ -75,6 +79,7 @@ const Calendar = () => {
                   textColor: "#fff",
                 },
               ]}
+              eventClick={(e) => console.log(e.event.extendedProps)}
             />
           </Grid>
         </Grid>
