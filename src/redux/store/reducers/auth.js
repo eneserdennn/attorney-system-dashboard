@@ -17,10 +17,16 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
 
   return data;
 });
+const initialState = {
+  user: null,
+  token: null,
+  status: "idle",
+  error: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: { user: null, token: null, status: "idle", error: null },
+  initialState,
   reducers: {
     logout: (state) => {
       state.user = null;
@@ -46,6 +52,8 @@ const authSlice = createSlice({
     },
   },
 });
+
+export const selectToken = (state) => state.auth.token;
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;

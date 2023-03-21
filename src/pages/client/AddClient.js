@@ -1,13 +1,31 @@
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Select } from "antd";
 import MainCard from "components/MainCard";
-
+import axios from "axios";
+import {
+  selectUserOptions,
+  selectUserStatus,
+} from "redux/store/reducers/users";
+import { useSelector } from "react-redux";
+import { useGetUsers } from "hooks/useGetUsers";
 const AddClient = () => {
-  const handleOnFinish = (value) => {
+  const token = localStorage.getItem("token");
+  const userStatus = useSelector(selectUserStatus);
+  useGetUsers(userStatus);
+  const userOptions = useSelector(selectUserOptions);
+  const handleOnFinish = async (value) => {
     console.log(value);
-    //post client
+    const res = await axios
+      .post("http://localhost:8000/api/clients/", value, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "json/application",
+        },
+      })
+      .then((res) => console.log(res));
+    console.log(res);
   };
   return (
-    <MainCard title="Add New Client" sx={{ textAlign: "center" }}>
+    <MainCard title="Add New Client">
       <Form
         onFinish={handleOnFinish}
         onValuesChange={(allValues) => console.log(allValues)}
@@ -27,7 +45,7 @@ const AddClient = () => {
       >
         <Form.Item
           name="name"
-          label="name"
+          label="Name"
           rules={[{ required: true, message: "Please input your nanme!" }]}
         >
           <Input />
@@ -35,14 +53,35 @@ const AddClient = () => {
         <Form.Item
           rules={[{ required: true, message: "Please input your surname!" }]}
           name="surname"
-          label="surname"
+          label="Surname"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="userId"
+          label="User"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Select options={userOptions} />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true, message: "Please input your phone!" }]}
+          name="phone"
+          label="Phone"
         >
           <Input />
         </Form.Item>
         <Form.Item
           rules={[{ required: true, message: "Please input your phone!" }]}
-          name="phone"
-          label="phone"
+          name="email"
+          label="E-mail"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true, message: "Please input your phone!" }]}
+          name="password"
+          label="Password"
         >
           <Input />
         </Form.Item>
@@ -50,18 +89,22 @@ const AddClient = () => {
         <Form.Item
           rules={[{ required: true, message: "Please input your address!" }]}
           name="address"
-          label="address"
+          label="Address"
         >
           <Input />
         </Form.Item>
         <Form.Item
           rules={[{ required: true, message: "Please input your city!" }]}
           name="city"
-          label="city"
+          label="City"
         >
           <Input />
         </Form.Item>
-        <Form.Item label="is Organization">
+        <Form.Item
+          rules={[{ required: true, message: "Please input your city!" }]}
+          name="country"
+          label="Country"
+        >
           <Input />
         </Form.Item>
 
@@ -81,15 +124,6 @@ const AddClient = () => {
           <Input />
         </Form.Item>
 
-        <Form.Item
-          rules={[
-            { required: true, message: "Please input your organization!" },
-          ]}
-          name="organization"
-          label="Organization"
-        >
-          <Input />
-        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit

@@ -13,6 +13,7 @@ import {
   selectUserStatus,
 } from "redux/store/reducers/users";
 import { useGetAllClients } from "hooks/useGetAllClients";
+import MainCard from "components/MainCard";
 
 const AddFolder = () => {
   const clientStatus = useSelector(selectStatus);
@@ -29,7 +30,7 @@ const AddFolder = () => {
       .then((res) => console.log(res.data));
   };
   return (
-    <>
+    <MainCard title="Add a Folder" align="left">
       <Form
         onFinish={handleOnFinish}
         onValuesChange={(allValues) => console.log(allValues)}
@@ -139,7 +140,7 @@ const AddFolder = () => {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </MainCard>
   );
 };
 
