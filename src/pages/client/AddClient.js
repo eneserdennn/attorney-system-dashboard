@@ -9,20 +9,35 @@ import { useSelector } from "react-redux";
 import { useGetUsers } from "hooks/useGetUsers";
 const AddClient = () => {
   const token = localStorage.getItem("token");
+
   const userStatus = useSelector(selectUserStatus);
   useGetUsers(userStatus);
   const userOptions = useSelector(selectUserOptions);
+
   const handleOnFinish = async (value) => {
-    console.log(value);
-    const res = await axios
-      .post("http://localhost:8000/api/clients/", value, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "json/application",
-        },
-      })
-      .then((res) => console.log(res));
-    console.log(res);
+    const { name, surname, userId, phone, email, password, address } = value;
+    const data = {
+        name,
+        surname,
+        userId,
+        phone,
+        email,
+        password,
+        address
+    }
+
+    const response = await axios.post(
+        "http://localhost:8000/api/clients",
+        data,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+
+            }
+        }
+    );
+    console.log(response);
+
   };
   return (
     <MainCard title="Add New Client">
