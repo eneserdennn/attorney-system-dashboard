@@ -5,15 +5,15 @@ import interactionPlugin from "@fullcalendar/interaction";
 import MainCard from "../../components/MainCard";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import AddEvent from "./AddEvent";
-const handleChange = () => {};
 const Calendar = () => {
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [open, setOpen] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
+  const [setModalText] = useState("Content of the modal");
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [eventDisplay, setEventDisplay] = useState({});
   useEffect(() => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -24,8 +24,6 @@ const Calendar = () => {
   function handleDateClick(info) {
     setSelectedDate(info.date);
     setOpen(true);
-    console.log(info);
-    console.log(selectedDate);
   }
 
   const handleOk = () => {
@@ -41,45 +39,93 @@ const Calendar = () => {
     console.log("Clicked cancel button");
     setOpen(false);
   };
+  const events = [
+    {
+      id: "1",
+      title: "Örnek etkinlik 1",
+      start: "2023-03-17T10:00:00",
+      display: false,
+      end: "2023-03-17T12:00:00",
+      backgroundColor: "#0277bd",
+      borderColor: "#01579b",
+      textColor: "#fff",
+      extendedProps: {
+        ananin: "ami",
+        associatedTo: "sdsd",
+      },
+    },
+    {
+      id: "2",
+      title: "Örnek etkinlik 2",
+      start: "2023-03-18T14:30:00",
+      end: "2023-03-18T16:30:00",
+      backgroundColor: "#9c27b0",
+      borderColor: "#6a1b9a",
+      textColor: "#fff",
+      editable: true,
+      extendedProps: {
+        associatedTo: "sdjsdj",
+      },
+    },
+  ];
 
+  const handleCheckboxChange = (event) => {
+    const eventId = event.target.id;
+    const newDisplay = event.target.checked ? "block" : "none";
+    setEventDisplay((prevDisplay) => ({
+      ...prevDisplay,
+      [eventId]: newDisplay,
+    }));
+  };
+
+  const getEventDisplay = (eventId) => {
+    return eventDisplay[eventId] || "auto";
+  };
+
+  const eventContent = (eventInfo) => {
+    const eventId = eventInfo.event.id;
+    return (
+      <div style={{ display: getEventDisplay(eventId) }}>
+        {eventInfo.timeText} - {eventInfo.event.title}
+      </div>
+    );
+  };
+
+  const eventDidMount = (eventInfo) => {
+    const eventId = eventInfo.event.id;
+    eventInfo.el.style.display = getEventDisplay(eventId);
+  };
   return (
     <MainCard title={"Calendar"}>
       <Box>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <div className="">deneme</div>
+            {events.map((event) => {
+              return (
+                <>
+                  <div key={event.id}>
+                    <label>
+                      {event.title}
+                      <input
+                        type="checkbox"
+                        id={event.id}
+                        onChange={handleCheckboxChange}
+                        checked={getEventDisplay(`${event.id}`) === "block"}
+                      />
+                    </label>
+                  </div>
+                </>
+              );
+            })}
           </Grid>
           <Grid item xs={9}>
             <FullCalendar
               ref={calendarRef}
-              select={(e) => console.log(e)}
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              events={[
-                {
-                  id: "1",
-                  title: "Örnek etkinlik 1",
-                  start: "2023-03-17T10:00:00",
-                  display: false,
-                  end: "2023-03-17T12:00:00",
-                  backgroundColor: "#0277bd",
-                  borderColor: "#01579b",
-                  textColor: "#fff",
-                  extendedProps: {
-                    ananin: "ami",
-                  },
-                },
-                {
-                  id: "2",
-                  title: "Örnek etkinlik 2",
-                  start: "2023-03-18T14:30:00",
-                  end: "2023-03-18T16:30:00",
-                  backgroundColor: "#9c27b0",
-                  borderColor: "#6a1b9a",
-                  textColor: "#fff",
-                },
-              ]}
-              eventClick={(e) => console.log(e.event.extendedProps)}
+              events={events}
+              eventContent={eventContent}
+              eventDidMount={eventDidMount}
             />
           </Grid>
         </Grid>

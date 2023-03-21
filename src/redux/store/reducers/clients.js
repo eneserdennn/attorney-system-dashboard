@@ -9,13 +9,18 @@ const initialState = {
   error: null,
   updateStatus: "idle",
   updatedClient: {},
+  options: [],
 };
+
 const BASE_URL = "http://localhost:8000";
 
-const fetchClients = createAsyncThunk("clients/fetchClients", async () => {
-  const response = await axios.get(`${BASE_URL}/api/clients/`);
-  return response.data;
-});
+export const fetchClients = createAsyncThunk(
+  "clients/fetchClients",
+  async () => {
+    const response = await axios.get(`${BASE_URL}/api/clients/`);
+    return response.data;
+  }
+);
 
 export const fetchClient = createAsyncThunk(
   "client/fetchClient",
@@ -24,16 +29,7 @@ export const fetchClient = createAsyncThunk(
     return response.data;
   }
 );
-// export const postClient = createAsyncThunk(
-//   "clients/postClient",
-//   async (clientInfo) => {
-//     const response = await axios.put(
-//       `${BASE_URL}/api/clients/${clientInfo._id}`
-//     );
 
-//     return response.data;
-//   }
-// );
 const clientsSlice = createSlice({
   name: "clients",
   initialState,
@@ -46,8 +42,13 @@ const clientsSlice = createSlice({
       .addCase(fetchClients.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.clients = action.payload.filter(
-          (user) => user.isOrganization === false && user.deleted === false
+          (client) =>
+            client.isOrganization === false && client.deleted === false
         );
+        state.options = action.payload.map((client) => ({
+          value: client._id,
+          label: client.name,
+        }));
       })
       .addCase(fetchClients.rejected, (state, action) => {
         state.status = "failed";
@@ -66,8 +67,9 @@ const clientsSlice = createSlice({
       });
   },
 });
-
 export const selectAllClients = (state) => state.clients.clients;
+
+export const selectOptions = (state) => state.clients.options;
 
 export const selectStatus = (state) => state.clients.status;
 

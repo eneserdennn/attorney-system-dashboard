@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Form, Input, TimePicker, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 
 const AddEvent = () => {
-  const [form, setForm] = useState({});
   const format = "HH:mm";
   const { TextArea } = Input;
   const options = [
@@ -106,6 +105,7 @@ const AddEvent = () => {
       >
         <Select
           defaultValue="lucy"
+          onChange={(e) => console.log(e)}
           style={{
             width: 120,
           }}

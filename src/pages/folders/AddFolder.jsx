@@ -1,124 +1,142 @@
-import { PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Cascader,
-  Checkbox,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
+import { Button, Checkbox, Form, Input, Select } from "antd";
 import { useState } from "react";
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
+import axios from "axios";
+import { useSelector } from "react-redux";
+import {
+  selectAllClients,
+  selectOptions,
+  selectStatus,
+} from "redux/store/reducers/clients";
+import { useGetUsers } from "hooks/useGetUsers";
+import {
+  selectUserOptions,
+  selectUserStatus,
+} from "redux/store/reducers/users";
+import { useGetAllClients } from "hooks/useGetAllClients";
+
 const AddFolder = () => {
-  const [componentDisabled, setComponentDisabled] = useState(true);
+  const clientStatus = useSelector(selectStatus);
+  const userStatus = useSelector(selectUserStatus);
+  useGetAllClients(clientStatus);
+  useGetUsers(userStatus);
+  const clientOption = useSelector(selectOptions);
+  const userOptions = useSelector(selectUserOptions);
+  const handleOnFinish = async (value) => {
+    console.log(value);
+    //post client
+    await axios
+      .post(`http://localhost:8000/api/clients/${value.userId}/folders`, value)
+      .then((res) => console.log(res.data));
+  };
   return (
     <>
-      <Checkbox
-        checked={componentDisabled}
-        onChange={(e) => setComponentDisabled(e.target.checked)}
-      >
-        Form disabled
-      </Checkbox>
       <Form
+        onFinish={handleOnFinish}
+        onValuesChange={(allValues) => console.log(allValues)}
+        onFinishFailed={(e) => console.log(e)}
         labelCol={{
-          span: 4,
+          span: 8,
         }}
         wrapperCol={{
           span: 14,
         }}
         layout="horizontal"
-        disabled={componentDisabled}
         style={{
           maxWidth: 600,
         }}
       >
-        <Form.Item label="Checkbox" name="disabled" valuePropName="checked">
-          <Checkbox>Checkbox</Checkbox>
-        </Form.Item>
-        <Form.Item label="Radio">
-          <Radio.Group>
-            <Radio value="apple"> Apple </Radio>
-            <Radio value="pear"> Pear </Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="Input">
+        <Form.Item
+          name="name"
+          label="Folder Name"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="Select">
-          <Select>
-            <Select.Option value="demo">Demo</Select.Option>
-          </Select>
+        <Form.Item
+          name="natures"
+          label="Natures"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="TreeSelect">
-          <TreeSelect
-            treeData={[
-              {
-                title: "Light",
-                value: "light",
-                children: [
-                  {
-                    title: "Bamboo",
-                    value: "bamboo",
-                  },
-                ],
-              },
-            ]}
-          />
+        <Form.Item
+          name="jurisdictions"
+          label="jurisdictions"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="Cascader">
-          <Cascader
-            options={[
-              {
-                value: "zhejiang",
-                label: "Zhejiang",
-                children: [
-                  {
-                    value: "hangzhou",
-                    label: "Hangzhou",
-                  },
-                ],
-              },
-            ]}
-          />
+        <Form.Item
+          name="currency"
+          label="Currency"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="DatePicker">
-          <DatePicker />
+        <Form.Item
+          name="language"
+          label="Language"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="RangePicker">
-          <RangePicker />
+        <Form.Item name="client" label="Client">
+          <Select options={clientOption} />
         </Form.Item>
-        <Form.Item label="InputNumber">
-          <InputNumber />
+        <Form.Item
+          name="userId"
+          label="User"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Select options={userOptions} />
         </Form.Item>
-        <Form.Item label="TextArea">
-          <TextArea rows={4} />
+        <Form.Item
+          name="clientId"
+          label="Client"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="Switch" valuePropName="checked">
-          <Switch />
+        <Form.Item
+          name="billingMethod"
+          label="Billing Method"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="Upload" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
-            <div>
-              <PlusOutlined />
-              <div
-                style={{
-                  marginTop: 8,
-                }}
-              >
-                Upload
-              </div>
-            </div>
-          </Upload>
+        <Form.Item
+          name="applicableRate"
+          label="Applicable Rate"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="Button">
-          <Button>Button</Button>
+        <Form.Item
+          name="butgededAmount"
+          label="Butgeted Amount"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="fixedExpenses"
+          label="Fixed Expenses"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="documentPaths"
+          label="Document Paths"
+          rules={[{ message: "Please input your nanme!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Button
+          </Button>
         </Form.Item>
       </Form>
     </>

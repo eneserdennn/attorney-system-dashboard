@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllClients } from "redux/store/reducers/clients";
-import { fetchClients } from "redux/store/reducers/fetchClients";
+import { selectAllClients, fetchClients } from "redux/store/reducers/clients";
 
 export const useGetAllClients = (status) => {
   const dispatch = useDispatch();
