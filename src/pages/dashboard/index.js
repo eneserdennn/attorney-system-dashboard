@@ -1,5 +1,8 @@
 // import { useState } from 'react';
 
+import { useSelector } from "react-redux";
+import { authstate, dnmstate, selectToken } from "redux/store/reducers/auth";
+
 // // material-ui
 // import {
 //     Avatar,
@@ -70,14 +73,11 @@
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
-    // const [value, setValue] = useState('today');
-    // const [slot, setSlot] = useState('week');
-
-    return (
-        <>
-            TESTEETETS
-        </>
-    );
+  // const [value, setValue] = useState('today');
+  // const [slot, setSlot] = useState('week');
+  const dnm = useSelector(dnmstate);
+  console.log(dnm);
+  return <>TESTEETETS</>;
 };
 
 export default DashboardDefault;

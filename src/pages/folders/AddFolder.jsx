@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import {
   selectAllClients,
+  selectClientFolders,
   selectOptions,
   selectStatus,
 } from "redux/store/reducers/clients";
@@ -22,12 +23,52 @@ const AddFolder = () => {
   useGetUsers(userStatus);
   const clientOption = useSelector(selectOptions);
   const userOptions = useSelector(selectUserOptions);
+  const token = localStorage.getItem("token");
+  const dnm = useSelector(selectClientFolders);
+  console.log(dnm);
   const handleOnFinish = async (value) => {
     console.log(value);
+    const {
+      folderName,
+      natures,
+      jurisdictions,
+      currency,
+      userId,
+      clientId,
+      phone,
+      email,
+      password,
+      address,
+      billingMethod,
+      butgededAmount,
+      fixedAmount,
+    } = value;
+    const data = {
+      folderName,
+      natures,
+      jurisdictions,
+      currency,
+      userId,
+      clientId,
+      phone,
+      email,
+      password,
+      address,
+      billingMethod,
+      butgededAmount,
+      fixedAmount,
+    };
     //post client
-    await axios
-      .post(`http://localhost:8000/api/clients/${value.userId}/folders`, value)
-      .then((res) => console.log(res.data));
+    const response = await axios.post(
+      `http://localhost:8000/api/clients/${clientId}/folders`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response);
   };
   return (
     <MainCard title="Add a Folder" align="left">
@@ -47,7 +88,7 @@ const AddFolder = () => {
         }}
       >
         <Form.Item
-          name="name"
+          name="folderName"
           label="Folder Name"
           rules={[{ required: true, message: "Please input your nanme!" }]}
         >
@@ -62,7 +103,7 @@ const AddFolder = () => {
         </Form.Item>
         <Form.Item
           name="jurisdictions"
-          label="jurisdictions"
+          label="Jurisdictions"
           rules={[{ required: true, message: "Please input your nanme!" }]}
         >
           <Input />
@@ -81,7 +122,7 @@ const AddFolder = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item name="client" label="Client">
+        <Form.Item name="clientId" label="Client">
           <Select options={clientOption} />
         </Form.Item>
         <Form.Item
@@ -91,13 +132,7 @@ const AddFolder = () => {
         >
           <Select options={userOptions} />
         </Form.Item>
-        <Form.Item
-          name="clientId"
-          label="Client"
-          rules={[{ required: true, message: "Please input your nanme!" }]}
-        >
-          <Input />
-        </Form.Item>
+
         <Form.Item
           name="billingMethod"
           label="Billing Method"

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
 import axios from "../../../../node_modules/axios/index";
 
 const initialState = {
@@ -7,13 +8,15 @@ const initialState = {
   client: {},
   status: "idle",
   error: null,
-  updateStatus: "idle",
+  updatedStatus: "idle",
   updatedClient: {},
   options: [],
+  folders: [],
+  events: [],
 };
 
 const BASE_URL = "http://localhost:8000";
-
+const token = localStorage.getItem("token");
 export const fetchClients = createAsyncThunk(
   "clients/fetchClients",
   async () => {
@@ -30,10 +33,29 @@ export const fetchClient = createAsyncThunk(
   }
 );
 
+export const updateClient = createAsyncThunk(
+  "client/update",
+  async (client) => {
+    const res = await axios.put(
+      `${BASE_URL}/api/clients/${client._id}`,
+      client,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
 const clientsSlice = createSlice({
   name: "clients",
   initialState,
-  reducers: {},
+  reducers: {
+    setStatus: (state, action) => {
+      state.status = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchClients.pending, (state) => {
@@ -49,6 +71,8 @@ const clientsSlice = createSlice({
           value: client._id,
           label: client.name,
         }));
+        state.folders = action.payload.map((client) => client.folders);
+        state.events = action.payload.map((client) => client.events);
       })
       .addCase(fetchClients.rejected, (state, action) => {
         state.status = "failed";
@@ -64,6 +88,18 @@ const clientsSlice = createSlice({
       .addCase(fetchClient.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.client = action.payload;
+      })
+      .addCase(updateClient.pending, (state) => {
+        state.updatedStatus = "loading";
+      })
+      .addCase(updateClient.fulfilled, (state, action) => {
+        state.updatedClient = action.payload;
+        state.updatedStatus = "succeeded";
+        state.status = "idle";
+      })
+      .addCase(updateClient.rejected, (state, action) => {
+        state.updatedStatus = "failed";
+        state.error = action.error.message;
       });
   },
 });
@@ -76,5 +112,14 @@ export const selectStatus = (state) => state.clients.status;
 export const selectError = (state) => state.clients.error;
 
 export const selectClient = (state) => state.clients.client;
+
+export const selectClientFolders = (state) => state.clients.folders;
+
+export const selectClientsEvents = (state) => state.clients.events;
+export const selectUpdatedClient = (state) => state.clients.updatedClient;
+
+export const selectUpdatedStatus = (state) => state.clients.updatedStatus;
+
+export const { setStatus } = clientsSlice.actions;
 
 export default clientsSlice.reducer;

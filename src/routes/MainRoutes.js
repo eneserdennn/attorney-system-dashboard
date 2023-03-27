@@ -13,6 +13,7 @@ import AddClient from "pages/client/AddClient";
 import AddFolder from "pages/folders/AddFolder";
 import AddOrganization from "pages/organization/AddOrganization";
 import SingleClient from "pages/client/SingleClient";
+import AddForm from "pages/task/AddForm";
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import("pages/dashboard")));
@@ -81,6 +82,10 @@ const MainRoutes = {
     {
       path: "/add/clients",
       element: protectedRoutes(<AddClient />),
+    },
+    {
+      path: "/add/task",
+      element: protectedRoutes(<AddForm />),
     },
     {
       path: "/add/folders",

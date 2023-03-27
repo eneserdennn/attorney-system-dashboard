@@ -5,15 +5,34 @@ import interactionPlugin from "@fullcalendar/interaction";
 import MainCard from "../../components/MainCard";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { Modal } from "antd";
+import { Modal, Collapse } from "antd";
 import AddEvent from "./AddEvent";
+import { useSelector } from "react-redux";
+import {
+  selectClientsEvents,
+  selectStatus,
+} from "redux/store/reducers/clients";
+import { useGetEvents } from "hooks/useGetEvents";
 const Calendar = () => {
+  const { Panel } = Collapse;
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [open, setOpen] = useState(false);
   const [setModalText] = useState("Content of the modal");
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [eventDisplay, setEventDisplay] = useState({});
+  const status = useSelector(selectStatus);
+  useGetEvents(status);
+  const dnm = useSelector(selectClientsEvents);
+  const final = dnm.flat();
+  const modifiedArray = final.map((obj) => {
+    return {
+      ...obj,
+      start: obj.startDate,
+      end: obj.endDate,
+    };
+  });
+
   useEffect(() => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -22,7 +41,7 @@ const Calendar = () => {
   }, []);
 
   function handleDateClick(info) {
-    setSelectedDate(info.date);
+    setSelectedDate(info.dateStr);
     setOpen(true);
   }
 
@@ -39,35 +58,6 @@ const Calendar = () => {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-  const events = [
-    {
-      id: "1",
-      title: "Örnek etkinlik 1",
-      start: "2023-03-17T10:00:00",
-      display: false,
-      end: "2023-03-17T12:00:00",
-      backgroundColor: "#0277bd",
-      borderColor: "#01579b",
-      textColor: "#fff",
-      extendedProps: {
-        ananin: "ami",
-        associatedTo: "sdsd",
-      },
-    },
-    {
-      id: "2",
-      title: "Örnek etkinlik 2",
-      start: "2023-03-18T14:30:00",
-      end: "2023-03-18T16:30:00",
-      backgroundColor: "#9c27b0",
-      borderColor: "#6a1b9a",
-      textColor: "#fff",
-      editable: true,
-      extendedProps: {
-        associatedTo: "sdjsdj",
-      },
-    },
-  ];
 
   const handleCheckboxChange = (event) => {
     const eventId = event.target.id;
@@ -79,7 +69,7 @@ const Calendar = () => {
   };
 
   const getEventDisplay = (eventId) => {
-    return eventDisplay[eventId] || "auto";
+    return eventDisplay[eventId] || "block";
   };
 
   const eventContent = (eventInfo) => {
@@ -100,20 +90,27 @@ const Calendar = () => {
       <Box>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            {events.map((event) => {
+            {modifiedArray.map((event) => {
               return (
                 <>
-                  <div key={event.id}>
-                    <label>
-                      {event.title}
-                      <input
-                        type="checkbox"
-                        id={event.id}
-                        onChange={handleCheckboxChange}
-                        checked={getEventDisplay(`${event.id}`) === "block"}
-                      />
-                    </label>
-                  </div>
+                  <Collapse
+                    defaultKey={event.id}
+                    key={event.id}
+                    size="small"
+                    style={{ margin: "10px 0" }}
+                  >
+                    <Panel key={event.id} header={event.title}>
+                      <label>
+                        <h4>{event.title}</h4>
+                        <input
+                          type="checkbox"
+                          id={event.id}
+                          onChange={handleCheckboxChange}
+                          checked={getEventDisplay(`${event.id}`) === "block"}
+                        />
+                      </label>
+                    </Panel>
+                  </Collapse>
                 </>
               );
             })}
@@ -123,7 +120,7 @@ const Calendar = () => {
               ref={calendarRef}
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              events={events}
+              events={modifiedArray}
               eventContent={eventContent}
               eventDidMount={eventDidMount}
             />
@@ -138,7 +135,7 @@ const Calendar = () => {
         onCancel={handleCancel}
       >
         <MainCard>
-          <AddEvent />
+          <AddEvent selectedDate={selectedDate} />
         </MainCard>
       </Modal>
     </MainCard>

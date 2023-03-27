@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllClients, fetchClients } from "redux/store/reducers/clients";
+import { fetchClients, selectAllClients } from "redux/store/reducers/clients";
 
-export const useGetAllClients = (status) => {
+export const useGetEvents = (status) => {
   const dispatch = useDispatch();
-
   const clients = useSelector(selectAllClients);
 
   useEffect(() => {
-    if (status === "idle" || status === "loading") {
+    if (status === "idle") {
       dispatch(fetchClients());
     }
-  }, [status, dispatch]);
+  }, [dispatch, status]);
+
   return { clients };
 };

@@ -3,7 +3,9 @@ import { Tabs } from "antd";
 import React from "react";
 import MainCard from "../../components/MainCard";
 import NotStarted from "./NotStarted/index";
-
+import AddIcon from "@mui/icons-material/Add";
+import { Button, Tooltip } from "antd";
+import { Link } from "react-router-dom";
 const Task = () => {
   const onChange = (key) => {
     console.log(key);
@@ -33,6 +35,11 @@ const Task = () => {
   ];
   return (
     <MainCard title={"Tasks"}>
+      <Link to={"/add/task"}>
+        <Tooltip title="Add a Task">
+          <Button type="primary" shape="circle" icon={<AddIcon />} />
+        </Tooltip>
+      </Link>
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </MainCard>
   );

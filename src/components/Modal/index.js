@@ -1,36 +1,36 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, modalState } from "redux/store/reducers/modal";
 import ModalStep from "components/Steps/index";
 import EditFormContext from "context/EditFormContext";
-import axios from "../../../node_modules/axios/index";
+import {
+  selectUpdatedStatus,
+  updateClient,
+} from "redux/store/reducers/clients";
 
 const ModalPage = () => {
   const dispatch = useDispatch();
   const modal = useSelector(modalState);
+  const updateStatus = useSelector(selectUpdatedStatus);
 
-  const [confirmLoading] = useState(false);
   const { clientForm } = useContext(EditFormContext);
 
   const handleOk = () => {
-    console.log(clientForm);
-    postClient(clientForm);
+    dispatch(updateClient(clientForm));
+    updateStatus === "succeeded" && dispatch(closeModal());
   };
+
   const handleCancel = () => {
     dispatch(closeModal());
   };
-  const postClient = async (clientForm) =>
-    await axios
-      .put(`http://localhost:8000/api/clients/${clientForm._id}`, clientForm)
-      .then((res) => console.log(res.data));
+
   return (
     <>
       <Modal
         title="Edit a Client"
         open={modal}
         onOk={handleOk}
-        confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
         <ModalStep />

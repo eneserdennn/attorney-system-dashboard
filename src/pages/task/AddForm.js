@@ -8,7 +8,7 @@ import {
 import { useSelector } from "react-redux";
 import { useGetUsers } from "hooks/useGetUsers";
 import { selectToken } from "redux/store/reducers/auth";
-const AddClient = () => {
+const AddForm = () => {
   const token = useSelector(selectToken);
   const userStatus = useSelector(selectUserStatus);
   useGetUsers(userStatus);
@@ -38,7 +38,7 @@ const AddClient = () => {
     console.log(response);
   };
   return (
-    <MainCard title="Add New Client">
+    <MainCard title="Add New Task">
       <Form
         onFinish={handleOnFinish}
         onValuesChange={(allValues) => console.log(allValues)}
@@ -147,4 +147,4 @@ const AddClient = () => {
   );
 };
 
-export default AddClient;
+export default AddForm;

@@ -4,7 +4,7 @@ import { selectStatus } from "redux/store/reducers/clients";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import { useGetAllClients } from "hooks/useGetAllClients";
-import DataGridCreater from "components/DgCreater/DataGridCreater";
+import { DataGrid } from "@mui/x-data-grid";
 import ModalPage from "components/Modal/index";
 import { Button, Tooltip } from "antd";
 import AddIcon from "@mui/icons-material/Add";
@@ -16,10 +16,12 @@ import {
 import { EditFormProvider } from "context/EditFormContext";
 import { Link } from "react-router-dom";
 import MainCard from "components/MainCard";
+
 const Client = () => {
   const status = useSelector(selectStatus);
   const { clients } = useGetAllClients(status);
   const dispatch = useDispatch();
+
   const columns = [
     { field: "_id", headerName: "ID" },
     {
@@ -47,9 +49,9 @@ const Client = () => {
             },
           }}
           onClick={() => {
-            dispatch(openModal());
-            dispatch(setModalType("client"));
             dispatch(setModalRowInfo(params.row));
+            dispatch(setModalType("client"));
+            dispatch(openModal());
           }}
         />
       ),
@@ -68,7 +70,11 @@ const Client = () => {
         </Link>
         <Box height="75vh">
           <ModalPage />
-          <DataGridCreater columns={columns} clients={clients} />
+          <DataGrid
+            getRowId={(row) => row._id}
+            columns={columns}
+            rows={clients}
+          />
         </Box>
       </EditFormProvider>
     </MainCard>

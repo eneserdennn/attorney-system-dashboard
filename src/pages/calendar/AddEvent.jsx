@@ -2,9 +2,11 @@ import React from "react";
 import { Button, Form, Input, TimePicker, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 
-const AddEvent = () => {
-  const format = "HH:mm";
+const AddEvent = ({ selectedDate }) => {
+  console.log(selectedDate);
   const { TextArea } = Input;
+  const format = "HH:mm";
+  const dateFormat = "DD/MM/YYYY";
   const options = [
     {
       value: "jack",
@@ -66,7 +68,7 @@ const AddEvent = () => {
         name="starttime"
         rules={[{ required: true, message: "Please select a date & time !" }]}
       >
-        <TimePicker />
+        <TimePicker format={format} />
       </Form.Item>
 
       <Form.Item
