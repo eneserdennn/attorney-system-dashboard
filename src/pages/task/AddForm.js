@@ -1,4 +1,4 @@
-import { Form, Input, Button, Select } from "antd";
+import { Form, Input, Button, DatePicker, TimePicker, Select } from "antd";
 import MainCard from "components/MainCard";
 import axios from "axios";
 import {
@@ -8,12 +8,34 @@ import {
 import { useSelector } from "react-redux";
 import { useGetUsers } from "hooks/useGetUsers";
 import { selectToken } from "redux/store/reducers/auth";
+import {
+  selectAllClients,
+  selectOptions,
+  selectStatus,
+} from "redux/store/reducers/clients";
+import { useGetAllClients } from "hooks/useGetAllClients";
 const AddForm = () => {
   const token = useSelector(selectToken);
   const userStatus = useSelector(selectUserStatus);
+  const clientStatus = useSelector(selectStatus);
   useGetUsers(userStatus);
+  useGetAllClients(clientStatus);
   const userOptions = useSelector(selectUserOptions);
-
+  const clientOptions = useSelector(selectOptions);
+  console.log(clientOptions);
+  const statusOptions = [
+    { label: "Normal", value: "normal" },
+    { label: "High", value: "high" },
+    { label: "Low", value: "low" },
+  ];
+  const taskTypes = [
+    { label: "Stain", value: "stain" },
+    { label: "Call", value: "call" },
+    { label: "Meeting", value: "meeting" },
+    { label: "Writing", value: "writing" },
+    { label: "Research", value: "research" },
+    { label: "Procedure Date", value: "proceduredate" },
+  ];
   const handleOnFinish = async (value) => {
     const { name, surname, userId, phone, email, password, address } = value;
     const data = {
@@ -58,17 +80,17 @@ const AddForm = () => {
       >
         <Form.Item
           name="name"
-          label="Name"
+          label="Task Name"
           rules={[{ required: true, message: "Please input your nanme!" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true, message: "Please input your surname!" }]}
-          name="surname"
-          label="Surname"
+          name="priority"
+          label="Priority"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
         >
-          <Input />
+          <Select options={statusOptions} />
         </Form.Item>
         <Form.Item
           name="userId"
@@ -78,65 +100,34 @@ const AddForm = () => {
           <Select options={userOptions} />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true, message: "Please input your phone!" }]}
-          name="phone"
-          label="Phone"
+          name="task"
+          label="Task Type"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
         >
-          <Input />
+          <Select options={taskTypes} />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true, message: "Please input your phone!" }]}
-          name="email"
-          label="E-mail"
+          label="Start Date"
+          name="startdate"
+          rules={[{ required: true, message: "Please select a date & time !" }]}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          rules={[{ required: true, message: "Please input your phone!" }]}
-          name="password"
-          label="Password"
-        >
-          <Input />
+          <DatePicker />
         </Form.Item>
 
         <Form.Item
-          rules={[{ required: true, message: "Please input your address!" }]}
-          name="address"
-          label="Address"
+          label="End Time"
+          name="endtime"
+          rules={[{ required: true, message: "Please select a date & time !" }]}
         >
-          <Input />
+          <TimePicker />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true, message: "Please input your city!" }]}
-          name="city"
-          label="City"
+          name="associatedTo"
+          label="Associated To"
+          rules={[{ required: true, message: "Please input your nanme!" }]}
         >
-          <Input />
+          <Select options={clientOptions} />
         </Form.Item>
-        <Form.Item
-          rules={[{ required: true, message: "Please input your city!" }]}
-          name="country"
-          label="Country"
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          rules={[{ required: true, message: "Please input your username!" }]}
-          name="quality"
-          label="Quality"
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          rules={[{ required: true, message: "Please input your currency!" }]}
-          name="currency"
-          label="Currency"
-        >
-          <Input />
-        </Form.Item>
-
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit
