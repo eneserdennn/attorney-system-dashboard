@@ -8,11 +8,7 @@ import {
 import { useSelector } from "react-redux";
 import { useGetUsers } from "hooks/useGetUsers";
 import { selectToken } from "redux/store/reducers/auth";
-import {
-  selectAllClients,
-  selectOptions,
-  selectStatus,
-} from "redux/store/reducers/clients";
+import { selectOptions, selectStatus } from "redux/store/reducers/clients";
 import { useGetAllClients } from "hooks/useGetAllClients";
 const AddForm = () => {
   const token = useSelector(selectToken);
@@ -37,15 +33,12 @@ const AddForm = () => {
     { label: "Procedure Date", value: "proceduredate" },
   ];
   const handleOnFinish = async (value) => {
-    const { name, surname, userId, phone, email, password, address } = value;
+    const { name, priority, userId, task } = value;
     const data = {
       name,
-      surname,
+      priority,
       userId,
-      phone,
-      email,
-      password,
-      address,
+      task,
     };
 
     const response = await axios.post(

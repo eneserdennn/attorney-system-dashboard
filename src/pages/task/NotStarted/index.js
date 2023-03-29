@@ -8,11 +8,33 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
+import { Select } from "antd";
 
 const NotStarted = () => {
   const status = useSelector(selectStatusTasks);
   const tasks = useGetAllTasks(status);
   console.log(tasks);
+
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const options = [
+    {
+      value: "low",
+      label: "Low",
+    },
+    {
+      value: "normal",
+      label: "Normal",
+    },
+    {
+      value: "high",
+      label: "High",
+    },
+  ];
   return (
     <List>
       {tasks.tasks.length > 0 &&
@@ -37,11 +59,19 @@ const NotStarted = () => {
                       variant="body2"
                       color="text.primary"
                     >
-                      Ali Connors
+                      {task.userId.firstName}
                     </Typography>
                     {" — I'll be in your neighborhood doing errands this…"}
                   </React.Fragment>
                 }
+              />
+              <Select
+                showSearch
+                placeholder="Change Priority"
+                optionFilterProp="children"
+                onChange={onChange}
+                onSearch={onSearch}
+                options={options}
               />
             </ListItem>
           );

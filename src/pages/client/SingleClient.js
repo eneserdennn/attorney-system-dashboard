@@ -3,7 +3,9 @@ import useGetClient from "hooks/useGetClient";
 import React, { useEffect } from "react";
 import { Col, Row, Space, Grid } from "antd";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs/";
+import IconButton from "@mui/material/IconButton";
 
 const SingleClient = () => {
   const client = useGetClient(window.location.pathname);
@@ -20,10 +22,11 @@ const SingleClient = () => {
         >
           <Space>
             <h2>
-              {client.name} {client.surname}
+              {client.client.name} {client.client.surname}
             </h2>
           </Space>
           <Space>
+            <EditIcon />
             <DeleteIcon />
           </Space>
         </div>
@@ -39,10 +42,10 @@ const SingleClient = () => {
                   flexDirection: "column",
                 }}
               >
-                <Space>email: {client.email}</Space>
-                <Space>phone: {client.phone}</Space>
-                <Space>city: {client.city}</Space>
-                <Space>address: {client.address}</Space>
+                <Space>email: {client.client.email}</Space>
+                <Space>phone: {client.client.phone}</Space>
+                <Space>city: {client.client.city}</Space>
+                <Space>address: {client.client.address}</Space>
               </div>
             </MainCard>
           </Col>
@@ -55,7 +58,7 @@ const SingleClient = () => {
                   flexDirection: "column",
                 }}
               >
-                <Space>Currency: {client.currency}</Space>
+                <Space>Currency: {client.client.currency}</Space>
                 <Space>Vat Rate: </Space>
                 <Space>Hour Rate:</Space>
               </div>
