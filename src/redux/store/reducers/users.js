@@ -44,4 +44,6 @@ export const selectUserOptions = (state) => state.users.options;
 
 export const selectUserStatus = (state) => state.users.status;
 
+export const selectUserById = (state, userId) => state.users.byId[userId];
+
 export default usersSlice.reducer;

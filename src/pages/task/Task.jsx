@@ -6,7 +6,15 @@ import NotStarted from "./NotStarted/index";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Tooltip } from "antd";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {
+  selectInProgressTasks,
+  selectNotStartedTasks,
+} from "redux/store/reducers/tasks";
+import InProgress from "./InProgress/index";
 const Task = () => {
+  const inProgressTasks = useSelector(selectInProgressTasks);
+  const notStartedTasks = useSelector(selectNotStartedTasks);
   const onChange = (key) => {
     console.log(key);
   };
@@ -15,12 +23,12 @@ const Task = () => {
     {
       key: "1",
       label: `Not Started`,
-      children: <NotStarted />,
+      children: <NotStarted notStartedTasks={notStartedTasks} />,
     },
     {
       key: "2",
       label: `In Progress`,
-      children: `Content of Tab Pane 2`,
+      children: <InProgress inProgressTasks={inProgressTasks} />,
     },
     {
       key: "3",

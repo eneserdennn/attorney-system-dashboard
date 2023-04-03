@@ -1,7 +1,7 @@
 import MainCard from "components/MainCard";
 import useGetClient from "hooks/useGetClient";
-import React, { useEffect } from "react";
-import { Col, Row, Space, Grid } from "antd";
+import React from "react";
+import { Col, Row, Space, Progress } from "antd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs/";
@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 
 const SingleClient = () => {
   const client = useGetClient(window.location.pathname);
+  const percent = 99.9;
 
   return (
     <MainCard>
@@ -61,6 +62,16 @@ const SingleClient = () => {
                 <Space>Currency: {client.client.currency}</Space>
                 <Space>Vat Rate: </Space>
                 <Space>Hour Rate:</Space>
+                <Space style={{ width: "100%", display: "block" }}>
+                  <Progress
+                    percent={percent}
+                    status={`${percent === 100 ? null : "active"}`}
+                    strokeColor={{
+                      "0%": "#108ee9",
+                      "100%": "#87d068",
+                    }}
+                  />
+                </Space>
               </div>
             </MainCard>
           </Col>

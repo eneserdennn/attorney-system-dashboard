@@ -2,13 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL =
-  "http://localhost:8000/api/users/64048c512c6cf50e0a8c2abc/tasks";
+const BASE_URL = "http://localhost:8000/api/tasks";
 
 const initialState = {
   tasks: [],
   status: "idle",
   error: null,
+  notStartedTasks: [],
+  inProgressTasks: [],
+  onHoldTasks: [],
+  completedTasks: [],
 };
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
   const response = await axios.get(`${BASE_URL}`, {
@@ -34,11 +37,22 @@ const tasksSlider = createSlice({
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
       state.tasks = action.payload;
       state.status = "succeeded";
+      state.notStartedTasks = action.payload.filter(
+        (task) => task.status === "notStarted"
+      );
+      state.onHold = action.payload.filter((task) => task.status === "onHold");
+      state.inProgressTasks = action.payload.filter(
+        (task) => task.status === "inProgress"
+      );
+      state.completedTasks = action.payload.filter(
+        (task) => task.status === "completed"
+      );
     });
   },
 });
 
 export const selectTasks = (state) => state.tasks.tasks;
 export const selectStatusTasks = (state) => state.tasks.status;
-
+export const selectNotStartedTasks = (state) => state.tasks.notStartedTasks;
+export const selectInProgressTasks = (state) => state.tasks.inProgressTasks;
 export default tasksSlider.reducer;
