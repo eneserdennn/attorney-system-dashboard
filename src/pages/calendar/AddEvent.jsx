@@ -1,34 +1,43 @@
 import React from "react";
 import { Button, Form, Input, TimePicker, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
+import { selectUserOptions } from "redux/store/reducers/users";
+import { useSelector } from "react-redux";
+import { selectOptions } from "redux/store/reducers/clients";
+import { useGetUsers } from "hooks/useGetUsers";
 
 const AddEvent = ({ selectedDate }) => {
+  useGetUsers("idle");
+  const users = useSelector(selectUserOptions);
+  const clientOptions = useSelector(selectOptions);
   console.log(selectedDate);
   const { TextArea } = Input;
   const format = "HH:mm";
-  const dateFormat = "DD/MM/YYYY";
-  const options = [
-    {
-      value: "jack",
-      label: "Jack",
-    },
-    {
-      value: "lucy",
-      label: "Lucy",
-    },
-    {
-      value: "Yiminghe",
-      label: "yiminghe",
-    },
-    {
-      value: "disabled",
-      label: "Disabled",
-      disabled: true,
-    },
-  ];
+
   const onFinish = (values) => {
-    console.log("Success:", values);
-    console.log(values.enddate.$d);
+    // console.log("Success:", values);
+    const { timeend, dateend, timestart, datestart } = values;
+    dayjs(timeend);
+    dayjs(dateend);
+    dayjs(timestart);
+    dayjs(datestart);
+    const formattedEndTime = timeend.format("HH:mm");
+    const formattedStartTime = timestart.format("HH:mm");
+    const formattedEnddate = dateend.format("DD/MM/YY");
+    const formattedStartDate = datestart.format("DD/MM/YY");
+
+    const data = {
+      ...values,
+      formattedEndTime,
+      formattedStartTime,
+      formattedEnddate,
+      formattedStartDate,
+    };
+    delete data.datestart;
+    delete data.timestart;
+    delete data.dateend;
+    delete data.timeend;
+    console.log(data);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -57,7 +66,7 @@ const AddEvent = ({ selectedDate }) => {
 
       <Form.Item
         label="Start Date"
-        name="startdate"
+        name="datestart"
         rules={[{ required: true, message: "Please select a date & time !" }]}
       >
         <DatePicker />
@@ -65,7 +74,7 @@ const AddEvent = ({ selectedDate }) => {
 
       <Form.Item
         label="Start Time"
-        name="starttime"
+        name="timestart"
         rules={[{ required: true, message: "Please select a date & time !" }]}
       >
         <TimePicker format={format} />
@@ -73,7 +82,7 @@ const AddEvent = ({ selectedDate }) => {
 
       <Form.Item
         label="End Date"
-        name="enddate"
+        name="dateend"
         rules={[{ required: true, message: "Please select a date & time !" }]}
       >
         <DatePicker />
@@ -81,7 +90,7 @@ const AddEvent = ({ selectedDate }) => {
 
       <Form.Item
         label="End Time"
-        name="endtime"
+        name="timeend"
         rules={[{ required: true, message: "Please select a date & time !" }]}
       >
         <TimePicker defaultValue={dayjs("12:08", format)} format={format} />
@@ -102,29 +111,27 @@ const AddEvent = ({ selectedDate }) => {
       </Form.Item>
       <Form.Item
         label="Calendar"
-        name="calendar"
+        name="userId"
         rules={[{ required: true, message: "Please input your username!" }]}
       >
         <Select
-          defaultValue="lucy"
           onChange={(e) => console.log(e)}
           style={{
-            width: 120,
+            width: "100%",
           }}
-          options={options}
+          options={users}
         />
       </Form.Item>
       <Form.Item
         label="Associated to"
-        name="associated-to"
+        name="associatedTo"
         rules={[{ required: true, message: "Please input your username!" }]}
       >
         <Select
-          defaultValue="lucy"
           style={{
-            width: 120,
+            width: "100%",
           }}
-          options={options}
+          options={clientOptions}
           onChange={(e) => console.log(e)}
         />
       </Form.Item>

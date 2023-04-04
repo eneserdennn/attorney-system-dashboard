@@ -13,12 +13,16 @@ import {
   selectStatus,
 } from "redux/store/reducers/clients";
 import { useGetEvents } from "hooks/useGetEvents";
+import {
+  selectUserOptions,
+  selectUserStatus,
+} from "redux/store/reducers/users";
 const Calendar = () => {
   const { Panel } = Collapse;
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [open, setOpen] = useState(false);
-  const [setModalText] = useState("Content of the modal");
+
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [eventDisplay, setEventDisplay] = useState({});
   const status = useSelector(selectStatus);
@@ -32,7 +36,8 @@ const Calendar = () => {
       end: obj.endDate,
     };
   });
-
+  //backendden userId yi dondur
+  //ardindan usera gore gruplayip eventleri bol
   useEffect(() => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -46,7 +51,6 @@ const Calendar = () => {
   }
 
   const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -85,6 +89,7 @@ const Calendar = () => {
     const eventId = eventInfo.event.id;
     eventInfo.el.style.display = getEventDisplay(eventId);
   };
+
   return (
     <MainCard title={"Calendar"}>
       <Box>

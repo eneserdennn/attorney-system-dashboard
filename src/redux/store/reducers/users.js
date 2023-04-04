@@ -8,7 +8,7 @@ const initialState = {
   error: null,
   options: [],
 };
-const BASE_URL = "http://localhost:8000/api/users";
+const BASE_URL = "http://api.eneserden.com/api/users";
 
 export const fetchUsers = createAsyncThunk("user/fetchUsers", async (id) => {
   const response = await axios.get(`${BASE_URL}`);

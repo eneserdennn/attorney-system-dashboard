@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8000/api/tasks";
+const BASE_URL = "http://api.eneserden.com/api/tasks";
 
 const initialState = {
   tasks: [],

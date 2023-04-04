@@ -15,7 +15,7 @@ const initialState = {
   events: [],
 };
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://api.eneserden.com";
 const token = localStorage.getItem("token");
 export const fetchClients = createAsyncThunk(
   "clients/fetchClients",
