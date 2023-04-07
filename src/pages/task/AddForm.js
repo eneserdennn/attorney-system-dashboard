@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useGetUsers } from "hooks/useGetUsers";
 import { selectOptions, selectStatus } from "redux/store/reducers/clients";
 import { useGetAllClients } from "hooks/useGetAllClients";
+
 import dayjs from "dayjs";
 const AddForm = () => {
   const statusOptions = [
@@ -29,6 +30,8 @@ const AddForm = () => {
     { label: "High", value: "high" },
     { label: "Low", value: "low" },
   ];
+  const format = "HH:mm";
+
   const taskTypes = [
     { label: "Stain", value: "stain" },
     { label: "Call", value: "call" },
@@ -132,7 +135,7 @@ const AddForm = () => {
           name="endtime"
           rules={[{ required: true, message: "Please select a date & time !" }]}
         >
-          <TimePicker />
+          <TimePicker format={format} />
         </Form.Item>
         <Form.Item
           name="associatedTo"

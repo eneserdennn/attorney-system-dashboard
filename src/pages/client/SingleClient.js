@@ -8,46 +8,60 @@ import React, { useRef, useState } from "react";
 import { Col, Row, Space, Progress } from "antd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import dayjs from "dayjs/";
+// import dayjs from "dayjs/";
 import IconButton from "@mui/material/IconButton";
 import DataGridCreater from "components/DgCreater/DataGridCreater";
 import { Link } from "react-router-dom";
 import { dataSource } from "./Consts/Consts";
+import { Tabs } from "antd";
+import { useSelector } from "react-redux";
+import {
+  selectInProgressTasks,
+  selectNotStartedTasks,
+} from "redux/store/reducers/tasks";
+import NotStarted from "pages/task/NotStarted/index";
+import InProgress from "pages/task/InProgress/index";
 const SingleClient = () => {
   const client = useGetClient(window.location.pathname);
   const [isEditing, setIsEditing] = useState(false);
   const percent = 99.9;
   const calendarRef = useRef(null);
+  const inProgressTasks = useSelector(selectInProgressTasks);
+  const notStartedTasks = useSelector(selectNotStartedTasks);
 
+  const items = [
+    {
+      key: "1",
+      label: `Not Started`,
+      children: <NotStarted notStartedTasks={notStartedTasks} />,
+    },
+    {
+      key: "2",
+      label: `In Progress`,
+      children: <InProgress inProgressTasks={inProgressTasks} />,
+    },
+    {
+      key: "3",
+      label: `On Hold`,
+      children: `Content of Tab Pane 3`,
+    },
+    {
+      key: "4",
+      label: `Completed`,
+      children: `Content of Tab Pane 3`,
+    },
+  ];
   const columns = [
-    { field: "_id", headerName: "ID" },
+    { field: "id", headerName: "ID" },
     {
       field: "name",
       headerName: "Name",
       flex: 1,
-      renderCell: (params) => (
-        <Link to={`/clients/${params.row._id}`}>{params.row.name}</Link>
-      ),
     },
     { field: "surname", headerName: "Surname", flex: 1 },
     { field: "email", headerName: "E Mail", flex: 1 },
     { field: "phone", headerName: "Phone", flex: 1 },
     { field: "city", headerName: "City", flex: 1 },
-    {
-      field: "actions",
-      headerName: "Edit/Delete",
-      type: "actions",
-      flex: 1,
-      renderCell: (params) => (
-        <EditIcon
-          sx={{
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }}
-        />
-      ),
-    },
   ];
   return (
     <MainCard>
@@ -86,7 +100,7 @@ const SingleClient = () => {
         </MainCard>
         <div style={{ marginTop: "20px" }}>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={6}>
               <MainCard title="Contact info">
                 <div
                   style={{
@@ -134,25 +148,7 @@ const SingleClient = () => {
                 </div>
               </MainCard>
             </Col>
-            <Col span={6}>
-              <MainCard title="Calender">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Space>
-                    <FullCalendar
-                      ref={calendarRef}
-                      plugins={[dayGridPlugin, interactionPlugin]}
-                      initialView="dayGridMonth"
-                    />
-                  </Space>
-                </div>
-              </MainCard>
-            </Col>
+
             <Col span={6}>
               <MainCard title="Payment Info">
                 <div
@@ -203,6 +199,17 @@ const SingleClient = () => {
                 </div>
               </MainCard>
             </Col>
+            <Col span={12}>
+              <MainCard title="Calender">
+                <div style={{ height: "225px", overflow: "auto" }}>
+                  <FullCalendar
+                    ref={calendarRef}
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    initialView="dayGridMonth"
+                  />
+                </div>
+              </MainCard>
+            </Col>
           </Row>
           <Row gutter={16} style={{ marginTop: "20px" }}>
             <Col span={24}>
@@ -213,16 +220,12 @@ const SingleClient = () => {
           </Row>
           <Row gutter={16} style={{ marginTop: "20px" }}>
             <Col span={24}>
-              <MainCard title="Events">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Space>{client.events}</Space>
-                </div>
+              <MainCard title="Tasks">
+                <Tabs
+                  defaultActiveKey="1"
+                  items={items}
+                  // onChange={onChange}
+                />
               </MainCard>
             </Col>
           </Row>

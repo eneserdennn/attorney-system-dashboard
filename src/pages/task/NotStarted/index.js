@@ -1,5 +1,5 @@
 import { useGetAllTasks } from "hooks/useGetAllTasks";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectStatusTasks } from "redux/store/reducers/tasks";
 import List from "@mui/material/List";
@@ -15,12 +15,13 @@ import dayjs from "dayjs";
 import { selectOptions } from "redux/store/reducers/clients";
 import { useGetAllClients } from "hooks/useGetAllClients";
 const NotStarted = ({ notStartedTasks }) => {
-  console.log(notStartedTasks);
   const status = useSelector(selectStatusTasks);
   const user = useGetAllUsers(status);
   const tasks = useGetAllTasks(status);
+  const [borderStatus, setBorderStatus] = useState(null);
   useGetAllClients("idle");
   const clients = useSelector(selectOptions);
+
   const userId = user.users.map((u) => {
     const { firstName, _id } = u;
     return { firstName, _id };
@@ -29,6 +30,10 @@ const NotStarted = ({ notStartedTasks }) => {
   const onChange = (value) => {
     // console.log(`selected ${value}`);
   };
+  const handlePriorityChange = (value) => {
+    setBorderStatus(value);
+  };
+
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -41,18 +46,19 @@ const NotStarted = ({ notStartedTasks }) => {
 
   const options = [
     {
-      value: "low",
+      value: "grey",
       label: "Low",
     },
     {
-      value: "normal",
+      value: "green",
       label: "Normal",
     },
     {
-      value: "high",
+      value: "red",
       label: "High",
     },
   ];
+  console.log(borderStatus);
   return (
     <List>
       {notStartedTasks.length > 0 &&
@@ -61,7 +67,11 @@ const NotStarted = ({ notStartedTasks }) => {
 
           return (
             <ListItem
-              sx={{ border: "1px solid red", alignItems: "flex-start", my: 2 }}
+              sx={{
+                border: `1px solid red`,
+                alignItems: "flex-start",
+                my: 2,
+              }}
             >
               <ListItemAvatar>
                 <Avatar
@@ -134,7 +144,7 @@ const NotStarted = ({ notStartedTasks }) => {
                   showSearch
                   placeholder="Change Priority"
                   optionFilterProp="children"
-                  onChange={onChange}
+                  onChange={handlePriorityChange}
                   onSearch={onSearch}
                   options={options}
                   defaultValue={task.priority}

@@ -116,6 +116,7 @@ export const selectClient = (state) => state.clients.client;
 export const selectClientFolders = (state) => state.clients.folders;
 
 export const selectClientsEvents = (state) => state.clients.events;
+
 export const selectUpdatedClient = (state) => state.clients.updatedClient;
 
 export const selectUpdatedStatus = (state) => state.clients.updatedStatus;

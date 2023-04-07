@@ -13,6 +13,7 @@ import {
   selectStatus,
 } from "redux/store/reducers/clients";
 import { useGetEvents } from "hooks/useGetEvents";
+import { useGetUsers } from "hooks/useGetUsers";
 import {
   selectUserOptions,
   selectUserStatus,
@@ -22,22 +23,28 @@ const Calendar = () => {
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [open, setOpen] = useState(false);
-
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [eventDisplay, setEventDisplay] = useState({});
   const status = useSelector(selectStatus);
   useGetEvents(status);
+  const users = useGetUsers(status);
   const dnm = useSelector(selectClientsEvents);
-  const final = dnm.flat();
-  const modifiedArray = final.map((obj) => {
+  const flattedList = dnm.flat();
+  const modifiedArray = flattedList.map((obj) => {
     return {
       ...obj,
       start: obj.startDate,
       end: obj.endDate,
     };
   });
-  //backendden userId yi dondur
-  //ardindan usera gore gruplayip eventleri bol
+
+  const matched = users.users.map((user) => {
+    const userActivity = modifiedArray.filter(
+      (activity) => activity.calendar === user.label
+    );
+    return { ...user, activities: userActivity };
+  });
+
   useEffect(() => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -47,6 +54,7 @@ const Calendar = () => {
 
   function handleDateClick(info) {
     setSelectedDate(info.dateStr);
+    console.log(info.dateStr);
     setOpen(true);
   }
 
@@ -95,30 +103,36 @@ const Calendar = () => {
       <Box>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            {modifiedArray.map((event) => {
-              return (
-                <>
+            {matched.length > 0 &&
+              matched.map((user) => {
+                return (
                   <Collapse
-                    defaultKey={event.id}
-                    key={event.id}
+                    defaultKey={user.value}
+                    key={user.value}
                     size="small"
                     style={{ margin: "10px 0" }}
                   >
-                    <Panel key={event.id} header={event.title}>
-                      <label>
-                        <h4>{event.title}</h4>
-                        <input
-                          type="checkbox"
-                          id={event.id}
-                          onChange={handleCheckboxChange}
-                          checked={getEventDisplay(`${event.id}`) === "block"}
-                        />
-                      </label>
+                    <Panel key={user.id} header={user.label}>
+                      {user.activities.length > 0 &&
+                        user.activities.map((activity) => (
+                          <label
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <input
+                              type="checkbox"
+                              id={activity.id}
+                              onChange={handleCheckboxChange}
+                              checked={
+                                getEventDisplay(`${activity.id}`) === "block"
+                              }
+                            />
+                            <h4>{activity.name}</h4>
+                          </label>
+                        ))}
                     </Panel>
                   </Collapse>
-                </>
-              );
-            })}
+                );
+              })}
           </Grid>
           <Grid item xs={9}>
             <FullCalendar
