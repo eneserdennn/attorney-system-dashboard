@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectStatusTasks, updateTasks } from "redux/store/reducers/tasks";
 import { options, statusOptions } from "../Const/index";
 import axios from "../../../../node_modules/axios/index";
-const InProgress = ({ inProgressTasks }) => {
+const OnHold = ({ onHoldTasks }) => {
   const status = useSelector(selectStatusTasks);
   const dispatch = useDispatch();
   const user = useGetAllUsers(status);
@@ -58,7 +58,7 @@ const InProgress = ({ inProgressTasks }) => {
 
   return (
     <div>
-      {inProgressTasks.map((task) => {
+      {onHoldTasks.map((task) => {
         const lastUser = userId.find((user) => user._id === task.userId);
         return (
           <ListItem
@@ -156,4 +156,4 @@ const InProgress = ({ inProgressTasks }) => {
   );
 };
 
-export default InProgress;
+export default OnHold;

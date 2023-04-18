@@ -1,7 +1,6 @@
-import { useGetAllTasks } from "hooks/useGetAllTasks";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectStatusTasks } from "redux/store/reducers/tasks";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectStatusTasks, updateTasks } from "redux/store/reducers/tasks";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -12,53 +11,72 @@ import { Select } from "antd";
 import Box from "@mui/material/Box";
 import { useGetAllUsers } from "hooks/useGetAllUsers";
 import dayjs from "dayjs";
-import { selectOptions } from "redux/store/reducers/clients";
 import { useGetAllClients } from "hooks/useGetAllClients";
+import { options, statusOptions } from "../Const/index";
+import axios from "../../../../node_modules/axios/index";
+import { useGetAllTasks } from "hooks/useGetAllTasks";
 const NotStarted = ({ notStartedTasks }) => {
   const status = useSelector(selectStatusTasks);
+  const dispatch = useDispatch();
   const user = useGetAllUsers(status);
-  const tasks = useGetAllTasks(status);
-  const [borderStatus, setBorderStatus] = useState(null);
   useGetAllClients("idle");
-  const clients = useSelector(selectOptions);
+  useGetAllTasks(status);
 
   const userId = user.users.map((u) => {
     const { firstName, _id } = u;
     return { firstName, _id };
   });
+  const token = localStorage.getItem("token");
 
-  const onChange = (value) => {
-    // console.log(`selected ${value}`);
+  const handleStatusChange = async (e, _id, userId) => {
+    const response = await axios.put(
+      `http://localhost:8000/api/tasks/${userId}/${_id}`,
+      {
+        status: e,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      dispatch(updateTasks("idle"));
+    }
   };
-  const handlePriorityChange = (value) => {
-    setBorderStatus(value);
+
+  const handlePriorityChange = async (e, _id, userId) => {
+    const response = await axios.put(
+      `http://localhost:8000/api/tasks/${userId}/${_id}`,
+      {
+        priority: e,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      dispatch(updateTasks("idle"));
+    }
   };
 
   const onSearch = (value) => {
     console.log("search:", value);
   };
-  const statusOptions = [
-    { label: "Not Started", value: "notStarted" },
-    { label: "On Hold", value: "onHold" },
-    { label: "In Progress", value: "inProgress" },
-    { label: "Completed", value: "completed" },
-  ];
-
-  const options = [
-    {
-      value: "grey",
-      label: "Low",
-    },
-    {
-      value: "green",
-      label: "Normal",
-    },
-    {
-      value: "red",
-      label: "High",
-    },
-  ];
-  console.log(borderStatus);
+  function getStatusColor(status) {
+    switch (status) {
+      case "high":
+        return "red";
+      case "low":
+        return "green";
+      default:
+        return "gray";
+    }
+  }
+  console.log(notStartedTasks);
   return (
     <List>
       {notStartedTasks.length > 0 &&
@@ -68,7 +86,7 @@ const NotStarted = ({ notStartedTasks }) => {
           return (
             <ListItem
               sx={{
-                border: `1px solid red`,
+                border: `1px solid ${getStatusColor(task.priority)}`,
                 alignItems: "flex-start",
                 my: 2,
               }}
@@ -144,7 +162,9 @@ const NotStarted = ({ notStartedTasks }) => {
                   showSearch
                   placeholder="Change Priority"
                   optionFilterProp="children"
-                  onChange={handlePriorityChange}
+                  onChange={(e) =>
+                    handlePriorityChange(e, task._id, task.userId)
+                  }
                   onSearch={onSearch}
                   options={options}
                   defaultValue={task.priority}
@@ -153,7 +173,7 @@ const NotStarted = ({ notStartedTasks }) => {
                   showSearch
                   placeholder="Status"
                   optionFilterProp="children"
-                  onChange={onChange}
+                  onChange={(e) => handleStatusChange(e, task._id, task.userId)}
                   onSearch={onSearch}
                   options={statusOptions}
                   defaultValue={task.status}

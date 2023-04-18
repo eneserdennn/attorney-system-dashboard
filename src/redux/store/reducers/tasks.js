@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://api.eneserden.com/api/tasks";
+const BASE_URL = "http://localhost:8000/api/tasks";
+const token = localStorage.getItem("token");
 
 const initialState = {
   tasks: [],
@@ -16,16 +17,20 @@ const initialState = {
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
   const response = await axios.get(`${BASE_URL}`, {
     headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDVkM2M3ZjU4NWFhNjNhODQxNzFiNCIsImlhdCI6MTY3ODEwMzU5OCwiZXhwIjoxNjgwNjk1NTk4fQ.aSrJ2noOj-oqHItTz4OA1Kr7qPP_TnGHNtkoReIKgaE",
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
 });
+
 const tasksSlider = createSlice({
   name: "tasks",
   initialState,
-  reducers: {},
+  reducers: {
+    updateTasks: (state, action) => {
+      state.status = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchTasks.pending, (state) => {
       state.status = "loading";
@@ -40,7 +45,9 @@ const tasksSlider = createSlice({
       state.notStartedTasks = action.payload.filter(
         (task) => task.status === "notStarted"
       );
-      state.onHold = action.payload.filter((task) => task.status === "onHold");
+      state.onHoldTasks = action.payload.filter(
+        (task) => task.status === "onHold"
+      );
       state.inProgressTasks = action.payload.filter(
         (task) => task.status === "inProgress"
       );
@@ -55,4 +62,7 @@ export const selectTasks = (state) => state.tasks.tasks;
 export const selectStatusTasks = (state) => state.tasks.status;
 export const selectNotStartedTasks = (state) => state.tasks.notStartedTasks;
 export const selectInProgressTasks = (state) => state.tasks.inProgressTasks;
+export const selectOnHoldTasks = (state) => state.tasks.onHoldTasks;
+export const selectCompletedTasks = (state) => state.tasks.completedTasks;
+export const { updateTasks } = tasksSlider.actions;
 export default tasksSlider.reducer;

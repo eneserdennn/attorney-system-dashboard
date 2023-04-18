@@ -1,9 +1,7 @@
-import { Button, Checkbox, Form, Input, Select } from "antd";
-import { useState } from "react";
+import { Button, Form, Input, Select, Switch } from "antd";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import {
-  selectAllClients,
   selectClientFolders,
   selectOptions,
   selectStatus,
@@ -140,12 +138,9 @@ const AddFolder = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="applicableRate"
-          label="Applicable Rate"
-          rules={[{ required: true, message: "Please input your nanme!" }]}
-        >
-          <Input />
+
+        <Form.Item label="Applicable Rate" valuePropName="checked">
+          <Switch />
         </Form.Item>
         <Form.Item
           name="butgededAmount"

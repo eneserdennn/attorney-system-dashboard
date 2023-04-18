@@ -8,13 +8,21 @@ import { Button, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
+  selectCompletedTasks,
   selectInProgressTasks,
   selectNotStartedTasks,
+  selectOnHoldTasks,
 } from "redux/store/reducers/tasks";
 import InProgress from "./InProgress/index";
+import { useGetAllTasks } from "hooks/useGetAllTasks";
+import OnHold from "./OnHold/index";
+import Completed from "./Completed/index";
 const Task = () => {
+  useGetAllTasks("idle");
   const inProgressTasks = useSelector(selectInProgressTasks);
   const notStartedTasks = useSelector(selectNotStartedTasks);
+  const onHoldTasks = useSelector(selectOnHoldTasks);
+  const completedTasks = useSelector(selectCompletedTasks);
   const onChange = (key) => {
     console.log(key);
   };
@@ -33,12 +41,12 @@ const Task = () => {
     {
       key: "3",
       label: `On Hold`,
-      children: `Content of Tab Pane 3`,
+      children: <OnHold onHoldTasks={onHoldTasks} />,
     },
     {
       key: "4",
       label: `Completed`,
-      children: `Content of Tab Pane 3`,
+      children: <Completed completedTasks={completedTasks} />,
     },
   ];
   return (

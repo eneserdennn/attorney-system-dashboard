@@ -8,8 +8,17 @@ import auth from "./auth";
 import modal from "./modal";
 import users from "./users";
 import tasks from "./tasks";
+import folders from "./folders";
 // ==============================|| COMBINE REDUCERS ||============================== //
 
-const reducers = combineReducers({ menu, clients, auth, modal, users, tasks });
+const reducers = combineReducers({
+  menu,
+  clients,
+  auth,
+  modal,
+  users,
+  tasks,
+  folders,
+});
 
 export default reducers;
